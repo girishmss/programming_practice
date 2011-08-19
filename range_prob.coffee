@@ -36,20 +36,18 @@ class Range
             for i in [0...arr.length]
                 if arr[i]
                     str = i + ' ' + arr[i]
-                    #console.log "output " + str
                     result.push(str)
         return result
 
 class Test_Range
     "test insert and range": ->
         r  = new Range()
-        res = r.insert(3, 4, 'a')
-        assert.equal('   aaaa', res)
-        assert.equal('3 a,4 a,5 a,6 a', r.range())
+        res = r.insert(2, 3, 'a')
+        assert.equal('  aaa', res)
+        assert.equal('2 a,3 a,4 a', r.range())
 
-        res2 = r.insert(4, 6, 'g')
-        assert.equal('    gggggg', res2)
-        assert.equal('3 a,4 ag,5 ag,6 ag', r.range(2, 4))
+        res2 = r.insert(3, 2, 'g')
+        assert.equal('   gg', res2)
+        assert.equal('2 a,3 ag,4 ag', r.range(2, 3))
 
 UnitTest::run(new Test_Range)
-
