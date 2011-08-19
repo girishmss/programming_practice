@@ -1,0 +1,12 @@
+This repo has all my practice programs
+
+range.coffee : In this program users are asked to input commands either:
+insert <location (int)> <number_of_times (int)> <value (char)> OR
+range or range <From (int)> <number_of_places (int)>
+
+insert - 
+    This command takes two integer arguments and  places the char in location position number_of_times times in a array
+
+range -
+    This command displays the array
+
