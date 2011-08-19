@@ -1,53 +1,55 @@
-stdin = process.openStdin()
-stdin.setEncoding 'utf8'
-arr = []
-inputCallback = null
-stdin.on 'data', (input) -> inputCallback input
+{log, assert, UnitTest} = require './assert'
 
-insert = (loc, num, char) ->
-#loc = location in array where char needs to be inserted
-#num = Number of times the char needs to be inserted from location 'loc'
-#char = Character that needs to be implemented in array
-
-    num1 = Number loc
-    num2 = Number num
-    len = num1 + num2
-    for i in [num1...len]
-        if arr[i]
-            arr[i] = arr[i] + char[0]
-        else
-            arr[i] = char[0]
-    
-    for i in [0...len]
-        if arr[i] and arr[i].substr(-1) == char[0]
-            process.stdout.write arr[i].substr(-1)
-        else
-            process.stdout.write ' '
-
-range = (from = 0 , times) ->
-    num1 = Number from
-    if times
-        num2 = Number times
+class Range
+    arr = []
+    insert: (loc, num, char) ->
+        #loc = location in array where char needs to be inserted
+        #num = Number of times the char needs to be inserted from location 'loc'
+        #char = Character that needs to be implemented in array
+        num1 = Number loc
+        num2 = Number num
         len = num1 + num2
         for i in [num1...len]
             if arr[i]
-                process.stdout.write i + ' ' + arr[i] + '\n'
-    else
-        for i in [0...arr.length]
-            if arr[i]
-                process.stdout.write i + ' ' + arr[i] + '\n'
-            
-promptForInput = ->
-    console.log "Enter command (insert or range)\n"
-    inputCallback = (input) ->
-        command = input.split(' ')
-        if command[0] is 'insert' and command.length is 4
-            insert(command[1], command[2], command[3])
-        else if command[0] is 'range\n' and (command.length is 1 or command.length is 3)
-            range(command[1], command[2])
+                arr[i] = arr[i] + char[0]
+            else
+                arr[i] = char[0]
+        result = ''
+        for i in [0...len]
+            if arr[i] and arr[i].substr(-1) == char[0]
+                result =  result + arr[i].substr(-1)
+            else
+                result = result + ' '
+        return result
+
+    range: (from = 0 , times) ->
+        num1 = Number from
+        result = []
+        if times
+            num2 = Number times
+            len = num1 + num2
+            for i in [num1..len]
+                if arr[i]
+                    str = i + ' ' + arr[i]
+                    result.push(str)
         else
-            console.log "\nInvalid command or data\n"
+            for i in [0...arr.length]
+                if arr[i]
+                    str = i + ' ' + arr[i]
+                    #console.log "output " + str
+                    result.push(str)
+        return result
 
+class Test_Range
+    "test insert and range": ->
+        r  = new Range()
+        res = r.insert(3, 4, 'a')
+        assert.equal('   aaaa', res)
+        assert.equal('3 a,4 a,5 a,6 a', r.range())
 
-console.log '\nWelcome to RANGE game\n'
-promptForInput()
+        res2 = r.insert(4, 6, 'g')
+        assert.equal('    gggggg', res2)
+        assert.equal('3 a,4 ag,5 ag,6 ag', r.range(2, 4))
+
+UnitTest::run(new Test_Range)
+
